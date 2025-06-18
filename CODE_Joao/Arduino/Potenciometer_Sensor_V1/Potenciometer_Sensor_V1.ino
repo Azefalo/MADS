@@ -7,7 +7,7 @@
 #define ADC_RES    1023.0     // ADC resolution (10 bits → 0..1023)
 
 // Time between samples (in milliseconds)
-const unsigned long SAMPLE_INTERVAL = 10000UL;
+const unsigned long SAMPLE_INTERVAL = 100UL;
 
 StaticJsonDocument<200> doc;
 unsigned long lastSampleTime = 0;
