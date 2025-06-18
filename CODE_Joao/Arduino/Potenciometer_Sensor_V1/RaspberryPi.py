@@ -28,8 +28,6 @@ def setup():
 # string `topic`.
 def get_output():
     ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-    if ser is None:
-        raise RuntimeError("Serial port not initialized. Call setup() first.")
     try:
         line = ser.readline().decode('utf-8').strip()
         if not line:
