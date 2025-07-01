@@ -1,4 +1,3 @@
-#include <ArduinoJson.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LIS3DH.h>
@@ -31,9 +30,6 @@ const int SAMPLE_US   = 20;      // µs between readings
 
 // Use the same sampling interval as the accelerometer code (200 ms → 5 Hz)
 #define SAMPLE_DELAY_MS  200 
-
-JsonDocument doc;
-String out;
 
 Adafruit_LIS3DH lis  = Adafruit_LIS3DH();
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
@@ -140,26 +136,33 @@ void loop() {
   // Vibration sensor reading
   int vibration_state = !digitalRead(VIB_PIN);
   
-  // --- Json Document ---
+
+  // --- Json Output ---
   if (current_time - prev_time >= SAMPLE_DELAY_MS*4) {
     onoff = !onoff;  // Toggle LED state
     digitalWrite(LED_BUILTIN, onoff);
-    doc["millis"] = millis();
-  
-    doc[DATA_FIELD]["X"] = ax;
-    doc[DATA_FIELD]["Y"] = ay;
-    doc[DATA_FIELD]["Z"] = az;
-    doc[DATA_FIELD]["magnitude"] = magnitude;
-    doc[DATA_FIELD]["vibration"] = vibration;
-    doc[DATA_FIELD]["sht31_temperature"] = sht31_temperature;
-    doc[DATA_FIELD]["sht31_humidity"] = sht31_humidity;
-    doc[DATA_FIELD]["dht_temperature"] = dht_temperature;
-    doc[DATA_FIELD]["dht_humidity"] = dht_humidity;
-    doc[DATA_FIELD]["sound_level"] = sound_level;
-    doc[DATA_FIELD]["vibration_state"] = vibration_state;
-    serializeJson(doc, out);
-    Serial.println(out);
+
+    // Prepare JSON output
+    char buf[256];
+    snprintf(buf, sizeof(buf),
+      "{\"millis\":%lu,\"data\":"
+        "{\"X\":%.3f,\"Y\":%.3f,\"Z\":%.3f,"
+        "\"magnitude\":%.3f,\"vibration\":%.3f,"
+        "\"sht31_temperature\":%.2f,\"sht31_humidity\":%.2f,"
+        "\"dht_temperature\":%.2f,\"dht_humidity\":%.2f,"
+        "\"sound_level\":%d,\"vibration_state\":%d}"
+      "}",
+      millis(),
+      ax, ay, az,
+      magnitude, vibration,
+      sht31_temperature, sht31_humidity,
+      dht_temperature, dht_humidity,
+      sound_level, vibration_state
+    );
+    Serial.println(buf);
+
     prev_time = now;
   }
+
   delay(SAMPLE_DELAY_MS);
 }
