@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # ————— CONFIGURAÇÃO —————
-PORT = '/dev/ttyUSB0'    # ajuste para sua porta serial
+PORT = '/dev/ttyACM0'    # ajuste para sua porta serial
 BAUD = 115200
 MAX_LEN = 100            # quantos pontos exibir no gráfico
 
