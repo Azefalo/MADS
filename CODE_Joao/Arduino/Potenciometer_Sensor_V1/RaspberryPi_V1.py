@@ -31,7 +31,7 @@ def get_output():
         # Decode to str, ignoring any invalid UTF-8 byte sequences
         raw = raw_bytes.decode('utf-8', errors='ignore').strip()
 
-        # Optional: skip any lines that don't look like JSON
+        # Skip any lines that don't look like JSON : Arduino running before py_source generates a first bad Json
         if not raw.startswith('{'):
             return json.dumps({"processed": False})
 
