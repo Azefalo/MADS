@@ -1,7 +1,8 @@
 ```ini
-[arduino_port_ACM1]
-port = "/dev/ttyACM1"
-baudrate = 115200
-silent = true
-connection_timeout = 5000
+[python_sink]
+period = 200
+venv = "/path/to/.venv"
+python_module = "my_sink"
+search_paths = ["/path/to/python/sink/folder"]
+sub_topic = [""]
 ```
